@@ -1,5 +1,0 @@
-> Neste projeto, são utilizados dois terminais, um roda o script "watch" e o outro o "start";
-> O script "watch" gera arquivos .js (dist/<arquivo>);
-> Utilizando estes dois terminais, é possível evitar o uso da dependência ts-node, que diminui a performance da aplicação;
-
-> Comparação de performance: https://prnt.sc/xbzvkf

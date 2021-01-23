@@ -63,4 +63,18 @@ export class ProductResolver {
         return product;
     }
 
+    // Deleta um Produto
+    @Mutation(() => Boolean)
+    async deleteProduct(
+        @Arg('id', () => Int) id: number,
+        @Ctx() { em }: MyContext
+    ): Promise<boolean> {
+        try {
+            em.nativeDelete(Product, { id });
+        } catch {
+            return false;
+        }
+        return true;
+    }
+
 }

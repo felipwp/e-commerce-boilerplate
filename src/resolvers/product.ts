@@ -1,5 +1,5 @@
 import { Product } from "../entities/product";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { MyContext } from "../types";
 
 @Resolver()
@@ -17,7 +17,7 @@ export class ProductResolver {
     // lista apenas um produto
     @Query(() => Product, { nullable: true })
     getProduct(
-        @Arg('id', () => Int) id: number,
+        @Arg('id') id: number,
         @Ctx() { em }: MyContext
     ): Promise<Product | null> {
         return em.findOne(Product, { id });
@@ -27,10 +27,8 @@ export class ProductResolver {
     // Cria um produto
     @Mutation(() => Product)
     async createProduct(
-        // O argumento necessita de duas coisas
-        // a tipagem para o TypeGraphQL (() => String)
-        // e a tipagem Typescript (name: string)
-        @Arg('name', () => String) name: string,
+        // O argumento da tipagem Typescript (name: string)
+        @Arg('name') name: string,
         @Ctx() { em }: MyContext
     ): Promise<Product> {
         const product = em.create(Product, { name });
@@ -41,10 +39,10 @@ export class ProductResolver {
     // Atualiza um produto
     @Mutation(() => Product, { nullable: true })
     async updateProduct(
-        @Arg('id', () => Int) id: number,
+        @Arg('id') id: number,
         // toda vez que um campo possa ser editado ou não, deve-se adicionar
         // { nullable: true } ao argumento
-        @Arg('name', () => String, { nullable: true }) name: string,
+        @Arg('name', { nullable: true }) name: string,
         @Ctx() { em }: MyContext
 
         // caso a função possa retornar null,
@@ -66,7 +64,7 @@ export class ProductResolver {
     // Deleta um Produto
     @Mutation(() => Boolean)
     async deleteProduct(
-        @Arg('id', () => Int) id: number,
+        @Arg('id') id: number,
         @Ctx() { em }: MyContext
     ): Promise<boolean> {
         try {

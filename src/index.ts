@@ -1,12 +1,12 @@
 import "reflect-metadata"
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
-import { Product } from "./entities/product";
 import express from "express";
 import { ApolloServer } from 'apollo-server-express';
 import microConfig from './mikro-orm.config';
 import { buildSchema } from "type-graphql";
 import { ProductResolver } from "./resolvers/product";
+import { UserResolver } from "./resolvers/user";
 
 // função usada para não precisar setar o arquivo todo como assíncrono
 const main = async () => {
@@ -17,7 +17,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [ProductResolver],
+            resolvers: [ProductResolver, UserResolver],
             validate: false
         }),
         context: () => ({ em: orm.em })

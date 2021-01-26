@@ -33,18 +33,49 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
 
-    @Mutation(() => User)
+    @Mutation(() => UserResponse)
     async register(
         @Arg('options') options: UsernamePasswordInput,
         @Ctx() { em }: MyContext
-    ) {
+    ): Promise<UserResponse> { 
+        if (options.username.length <= 2) {
+            return {
+                errors: [{
+                    field: 'username',
+                    message: 'O usuário deve ter pelo menos 3 caractéres'
+                }]
+            }
+        }
+
+        if (options.password.length <= 3) {
+            return {
+                errors: [{
+                    field: 'username',
+                    message: 'A senha deve ter pelo menos 4 dígitos'
+                }]
+            }
+
+        }
         const hashedPassword = await argon2.hash(options.password);
         const user = em.create(User, {
             username: options.username,
             password: hashedPassword
         });
-        await em.persistAndFlush(user);
-        return user;
+        try {
+            await em.persistAndFlush(user);
+        } catch (error) {
+            // caso o usuário já exista na db
+            if (error.code === '23505') {
+                return {
+                    errors: [{
+                        field: 'username',
+                        message: "Este usuário já está sendo utilizado"
+                    }]
+                }
+            } 
+            // console.log('Mensagem de erro: ' + error.message);
+        }
+        return { user };
     }
 
 

@@ -7,27 +7,64 @@ import microConfig from './mikro-orm.config';
 import { buildSchema } from "type-graphql";
 import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
+import connectRedis from 'connect-redis';
+import redis from 'redis';
+import session from 'express-session';
+import { MyContext } from "./types";
+
+
+
+
+
 
 // função usada para não precisar setar o arquivo todo como assíncrono
 const main = async () => {
     // conecta na db
     const orm = await MikroORM.init(microConfig);
+    // verifica se existe alguma migração para ser feita
+    await orm.getMigrator().up();
 
     const app = express();
+
+    const RedisStore = connectRedis(session)
+    const redisClient = redis.createClient()
+
+    app.use(
+        session({
+            name: 'qid',
+            store: new RedisStore({
+                client: redisClient,
+                disableTouch: true,
+                disableTTL: true
+            }),
+            cookie: {
+                maxAge: 1000 * 60 * 60 * 24 * 365.25 * 10, // máximo 10 anos de duração
+                httpOnly: true, // para que não seja possível acessar o cookie no front-end, evita scripts invasores
+                secure: false, // para que só funcione em https (localhost não usa https)
+                sameSite: 'lax', // CSRF
+
+            },
+            saveUninitialized: false, // não inicia uma session por default, apenas quando for necessário salvar dados
+            secret: 'saodfhaodskfpoasdoikasjfoiasdjoifuasiuyewqlknkmnvzxiuyqwe',
+            resave: false,
+        })
+    )
+
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [ProductResolver, UserResolver],
             validate: false
         }),
-        context: () => ({ em: orm.em })
+        context: ({ req, res }): MyContext => ({ em: orm.em, req, res })
     });
 
-    apolloServer.applyMiddleware({app});
+    apolloServer.applyMiddleware({ app });
 
     app.listen(8888, () => {
         console.log("Server listening port 8888")
     });
+
     // migrations
     //
     // também é possível rodar o comando npx mikro-orm migration:up
@@ -40,7 +77,7 @@ const main = async () => {
     // await orm.em.persistAndFlush(product);
 
 
-    // retorna todos os produtos cadastrados na db
+    // retornar todos os produtos cadastrados na db
     // const products = await orm.em.find(Product, {});
     // console.log(products);
 };

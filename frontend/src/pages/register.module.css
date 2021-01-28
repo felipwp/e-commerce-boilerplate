@@ -1,0 +1,21 @@
+.registerWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    height: 100vh;
+    background-image: url(../../public/assets/img/textures/pattern.png);
+    background-position: -20% 50%;
+    background-size: 60%;
+    background-repeat: repeat;
+}
+
+.loginForm {
+    width: 40%;
+    height: 100vh;
+    background-color: var(--dark-gray);
+    box-shadow: var(--box-shadow);
+}

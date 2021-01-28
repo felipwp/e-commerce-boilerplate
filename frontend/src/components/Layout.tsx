@@ -1,16 +1,17 @@
 import React from "react";
-import { Wrapper } from "./Wrapper";
 import { Header } from "./Header";
 
 interface LayoutProps {
-
+  style?: string;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, style }) => {
   return (
     <>
       <Header />
-      <Wrapper>{children}</Wrapper>
+      <div className={style}>
+        {children}
+      </div>
     </>
   );
 };

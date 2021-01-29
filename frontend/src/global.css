@@ -19,6 +19,8 @@ a:hover {
   font-size: 16px;
   --orange: #f7301d;
   --white: #ffffff;
+  --whiteish: rgba(255, 255, 255, 0.75);
+  --black: #000000;
   --darkest: #0a0a0a;
   --dark-gray: #111111;
   --box-shadow: 0px 12px 20px rgba(0,0,0, 0.5);

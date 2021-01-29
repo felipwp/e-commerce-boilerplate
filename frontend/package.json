@@ -7,9 +7,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "formik": "^2.2.6",
     "next": "latest",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "yup": "^0.32.8"
   },
   "license": "MIT",
   "devDependencies": {

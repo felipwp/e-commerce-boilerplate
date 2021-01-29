@@ -1,21 +1,107 @@
 .registerWrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    width: 100%;
-    height: 100vh;
-    background-image: url(../../public/assets/img/textures/pattern.png);
-    background-position: -20% 50%;
-    background-size: 60%;
-    background-repeat: repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+  background-image: url(../../public/assets/img/textures/pattern.png);
+  background-position: -20% 50%;
+  background-size: 60%;
+  background-repeat: repeat;
 }
 
-.loginForm {
-    width: 40%;
-    height: 100vh;
-    background-color: var(--dark-gray);
-    box-shadow: var(--box-shadow);
+.registrationContainer {
+  width: 21%;
+  padding: 0 10%;
+  height: 100vh;
+  background-color: var(--dark-gray);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form input {
+  background: var(--darkest);
+  border-style: solid;
+  border-color: var(--black);
+  border-width: 0px 0px 2px 0px;
+  height: 45px;
+  padding: 0 15px;
+  width: 100%;
+  color: var(--white);
+}
+
+.errorMessage {
+  color: var(--orange);
+  font-weight: 300;
+}
+
+.registerTitle {
+  font-weight: bold;
+  font-size: 48px;
+  line-height: 72px;
+  letter-spacing: 0.05em;
+  color: var(--white);
+}
+
+.registerSubtitle {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: 0.05em;
+  color: var(--whiteish);
+  margin-bottom: 20px;
+}
+
+.label {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.05em;
+  color: var(--whiteish);
+}
+.link {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.05em;
+  color: var(--whiteish);
+}
+
+.submitButton {
+  width: calc(100% + 30px);
+  height: 60px;
+  margin-top: 30px;
+  border: 3px solid var(--orange);
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Poppins;
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  color: var(--white);
+}
+
+.submitButton:hover {
+  border-color: var(--white);
+}
+
+.labelContainer {
+  height: 30px;
+  margin: 5px 0;
+  width: calc(100% + 30px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

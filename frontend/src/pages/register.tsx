@@ -40,6 +40,7 @@ export const Register: React.FC<registerProps> = ({}) => {
           <Formik
             initialValues={initialValues}
             validationSchema={RegisterSchema}
+            
             onSubmit={(values, actions) => {
               console.log({ values, actions });
               alert(JSON.stringify(values, null, 2));

@@ -1,10 +1,19 @@
 import "../global.css";
 import Head from "next/head";
+import {Provider, createClient} from 'urql';
+
+const client = createClient({
+  url: "http://localhost:8888/graphql",
+  fetchOptions: {
+    credentials: "include",
+  }
+  
+}); 
 
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }) {
   return (
-    <>
+    <Provider value={client}>
       <Head>
         <meta charSet="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -28,6 +37,6 @@ export default function MyApp({ Component, pageProps }) {
         <title>Mia Studios</title>
       </Head>
       <Component {...pageProps} />
-    </>
+    </Provider>
   );
 }

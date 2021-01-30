@@ -3,6 +3,7 @@ import { Layout } from "../components/Layout";
 import styles from "./register.module.css";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "urql";
 
 interface registerProps {
   username: string;
@@ -22,7 +23,32 @@ const RegisterSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
 
+
+const REGISTER_MUTATION = `
+mutation Register($username: String!, $password: String!){
+  register(options: {
+    username: $username,
+    password: $password
+  }){
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      createdAt
+      updatedAt
+      username
+		}
+  }
+}
+`
+
+
+
 export const Register: React.FC<registerProps> = ({}) => {
+  const [,register] = useMutation(REGISTER_MUTATION);
+
   const initialValues: registerProps = {
     username: "",
     password: "",
@@ -41,10 +67,9 @@ export const Register: React.FC<registerProps> = ({}) => {
             initialValues={initialValues}
             validationSchema={RegisterSchema}
             
-            onSubmit={(values, actions) => {
-              console.log({ values, actions });
-              alert(JSON.stringify(values, null, 2));
-              actions.setSubmitting(false);
+            onSubmit={(values) => {
+              console.log({ values });
+              return register(values);
             }}
           >
             {({ errors, touched }) => (

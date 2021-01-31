@@ -70,12 +70,12 @@ export class UserResolver {
       };
     }
 
-    if (options.password.length <= 3) {
+    if (options.password.length <= 5) {
       return {
         errors: [
           {
             field: "username",
-            message: "Password must have at least 4 characters",
+            message: "Password must have at least 6 characters",
           },
         ],
       };

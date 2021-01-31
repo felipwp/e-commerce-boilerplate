@@ -10,22 +10,20 @@ import NextLink from "next/link";
 import { Media } from "../components/Media";
 import { useLoginMutation } from "../generated/graphql";
 
-
 const loginSchema = Yup.object().shape({
   username: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
+    .min(2, "Too short!")
+    .max(50, "Too long!")
     .required("Required"),
   password: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
+    .min(2, "Too short!")
+    .max(50, "Too long!")
     .required("Required"),
 });
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
-
 
   return (
     <Layout style="indexWrapper" css="flex-cc">
@@ -36,7 +34,7 @@ export const Login: React.FC<{}> = ({}) => {
           <h1 className={styles.loginTitle}>Hello, welcome back!</h1>
         </div>
         <Formik
-          initialValues={{username: "", password: ""}}
+          initialValues={{ username: "", password: "" }}
           validationSchema={loginSchema}
           onSubmit={async (values, { setErrors }) => {
             const response = await login(values);
@@ -45,7 +43,7 @@ export const Login: React.FC<{}> = ({}) => {
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
               // conseguiu registrar o usuário
-              router.push('/')
+              router.push("/");
             }
           }}
         >
@@ -61,7 +59,11 @@ export const Login: React.FC<{}> = ({}) => {
                   </div>
                 ) : null}
               </div>
-              <Field name="username" placeholder="Your username" />
+              <Field
+                name="username"
+                placeholder="Your username"
+                autoComplete="username"
+              />
 
               <div className={commonStyles.labelContainer}>
                 <label htmlFor="password" className={commonStyles.label}>
@@ -77,6 +79,7 @@ export const Login: React.FC<{}> = ({}) => {
                 name="password"
                 type="password"
                 placeholder="Your password"
+                autoComplete="password"
               />
 
               <div className={styles.loginBottomContainer}>

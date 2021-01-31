@@ -4,7 +4,6 @@ import styles from "../../public/css/pages/register.module.css";
 import commonStyles from "../../public/css/common.module.css";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useMutation } from "urql";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
@@ -76,7 +75,11 @@ export const Register: React.FC<registerProps> = ({}) => {
                   </div>
                 ) : null}
               </div>
-              <Field name="username" placeholder="Your username" />
+              <Field
+                name="username"
+                placeholder="Your username"
+                autoComplete="username"
+              />
 
               <div className={commonStyles.labelContainer}>
                 <label htmlFor="password" className={commonStyles.label}>
@@ -92,6 +95,7 @@ export const Register: React.FC<registerProps> = ({}) => {
                 name="password"
                 type="password"
                 placeholder="Your password"
+                autoComplete="password"
               />
 
               <div className={commonStyles.labelContainer}>
@@ -104,7 +108,12 @@ export const Register: React.FC<registerProps> = ({}) => {
                   </div>
                 ) : null}
               </div>
-              <Field name="email" type="email" placeholder="Your email" />
+              <Field
+                name="email"
+                type="email"
+                placeholder="Your email"
+                autoComplete="email"
+              />
 
               <NextLink href="/login">Already have an account?</NextLink>
 

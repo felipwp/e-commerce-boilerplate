@@ -12,11 +12,11 @@ import { useLoginMutation } from "../generated/graphql";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
-    .min(2, "Too short!")
+    .min(3, "Too short!")
     .max(50, "Too long!")
     .required("Required"),
   password: Yup.string()
-    .min(2, "Too short!")
+    .min(6, "Too short!")
     .max(50, "Too long!")
     .required("Required"),
 });

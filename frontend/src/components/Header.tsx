@@ -8,11 +8,11 @@ interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery();
-  let body = null;
+  let body = (null);
 
   // dados carregando
   if (fetching) {
-    body = null;
+    body = (null);
 
     // usuário não está logado
   } else if (!data?.me) {
@@ -61,7 +61,9 @@ export const Header: React.FC<HeaderProps> = ({}) => {
             <NextLink href="/contact">Contact</NextLink>
           </div>
         </div>
-        <div className={styles.headerIcons}>{body}</div>
+        <div className={styles.headerIcons}>
+          {body}
+        </div>
       </header>
     </>
   );

@@ -5,6 +5,9 @@
   padding: 0;
   outline: 0;
   transition: all 100ms ease-in-out;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box;
 }
 
 a {
@@ -23,7 +26,7 @@ a:hover {
   --black: #000000;
   --darkest: #0a0a0a;
   --dark-gray: #111111;
-  --box-shadow: 0px 12px 20px rgba(0,0,0, 0.5);
+  --box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -38,4 +41,22 @@ body::-webkit-scrollbar-track {
 }
 body::-webkit-scrollbar-thumb {
   background: var(--orange);
+}
+
+.flex-cc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-cs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flex-sc {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }

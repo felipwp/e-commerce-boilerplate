@@ -11,11 +11,13 @@ import {
 } from "type-graphql";
 import { MyContext } from "../types";
 import argon2 from "argon2";
+import { EntityManager } from "@mikro-orm/postgresql";
 
 @InputType()
 class UsernamePasswordInput {
   @Field()
   username: string;
+
   @Field()
   password: string;
 }
@@ -62,7 +64,7 @@ export class UserResolver {
         errors: [
           {
             field: "username",
-            message: "O usuário deve ter pelo menos 3 caractéres",
+            message: "Username must have at least 3 characters",
           },
         ],
       };
@@ -73,26 +75,37 @@ export class UserResolver {
         errors: [
           {
             field: "username",
-            message: "A senha deve ter pelo menos 4 dígitos",
+            message: "Password must have at least 4 characters",
           },
         ],
       };
     }
     const hashedPassword = await argon2.hash(options.password);
-    const user = em.create(User, {
-      username: options.username,
-      password: hashedPassword,
-    });
+    let user;
+
     try {
-      await em.persistAndFlush(user);
-    } catch (error) {
+      const result = await(em as EntityManager)
+        .createQueryBuilder(User)
+        .getKnexQuery()
+        .insert({ 
+            username: options.username, 
+            password: hashedPassword,
+            created_at: new Date(), 
+            updated_at: new Date()
+        })
+        .returning("*");
+        user = result[0];
+        user.createdAt = result[0].created_at;
+        user.updatedAt = result[0].updated_at;
+
+    } catch (error) { 
       // caso o usuário já exista na db
       if (error.code === "23505") {
         return {
           errors: [
             {
               field: "username",
-              message: "Este usuário já está sendo utilizado",
+              message: "Username taken",
             },
           ],
         };
@@ -121,7 +134,7 @@ export class UserResolver {
         errors: [
           {
             field: "username",
-            message: "Este usuário não existe",
+            message: "This user does not exist",
           },
         ],
       };
@@ -133,7 +146,7 @@ export class UserResolver {
         errors: [
           {
             field: "password",
-            message: "Senha incorreta",
+            message: "Incorrect password",
           },
         ],
       };

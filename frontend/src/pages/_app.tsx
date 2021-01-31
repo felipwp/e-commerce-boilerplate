@@ -1,4 +1,4 @@
-import "../global.css";
+import "../../public/css/global.css";
 import Head from "next/head";
 import {Provider, createClient} from 'urql';
 
@@ -11,7 +11,7 @@ const client = createClient({
 }); 
 
 // This default export is required in a new `pages/_app.js` file.
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }: any) {
   return (
     <Provider value={client}>
       <Head>

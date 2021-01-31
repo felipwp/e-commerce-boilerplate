@@ -1,16 +1,16 @@
 import { Layout } from "../components/Layout";
 import { Media } from "../components/Media";
-import styles from "./index.module.css";
+import styles from "../../public/css/pages/index.module.css";
 
 const Index = () => {
   return (
     <>
-      <Layout style={styles.indexWrapper}>
+      <Layout style="indexWrapper" css="flex-cs">
         <div className={styles.hero}>
           <p>MIA STUDIOS</p>
           <p>BUILDING</p>
           <p>TEAM.</p>
-          <a className={styles.mainButton}>CONTACT US</a>
+          <a href="/contact" className={styles.mainButton}>CONTACT US</a>
         </div>
         <img src="assets/img/builds/hero-section-build.png" className={styles.heroBuild}/>
 

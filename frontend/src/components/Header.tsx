@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Header.module.css";
+import styles from "../../public/css/components/Header.module.css";
 import NextLink from "next/link";
 
 interface HeaderProps {}
@@ -18,14 +18,14 @@ export const Header: React.FC<HeaderProps> = ({}) => {
           <div className={styles.headerTextContainer}>
             <NextLink href="/">Home</NextLink>
             <NextLink href="/portfolio">Portfolio</NextLink>
-            <NextLink href="/about-us">About Us</NextLink>
+            <NextLink href="/about">About Us</NextLink>
             <NextLink href="/shop">Shop</NextLink>
             <NextLink href="/contact">Contact</NextLink>
           </div>
         </div>
         <div className={styles.headerIcons}>
           {/* user svg */}
-          <NextLink href="/register">
+          <NextLink href="/login">
             <svg
               width="30"
               height="30"

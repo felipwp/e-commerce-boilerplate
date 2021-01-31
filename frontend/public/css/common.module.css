@@ -1,28 +1,3 @@
-.registerWrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  height: 100vh;
-  background-image: url(../../public/assets/img/textures/pattern.png);
-  background-position: -20% 50%;
-  background-size: 60%;
-  background-repeat: repeat;
-}
-
-.registrationContainer {
-  width: 21%;
-  padding: 0 10%;
-  height: 100vh;
-  background-color: var(--dark-gray);
-  box-shadow: var(--box-shadow);
-  display: flex;
-  align-items: center;
-}
-
 .form {
   display: flex;
   flex-direction: column;
@@ -38,28 +13,26 @@
   padding: 2px 15px 0px 15px;
   width: 100%;
   color: var(--white);
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+
+/* para o autofill do navegador não ficar branco, arruinando a estética da página */
+.form input:-webkit-autofill,
+.form input:-webkit-autofill:hover,
+.form input:-webkit-autofill:focus,
+.form input:-webkit-autofill:active {
+  transition: color 9999s ease-out, background-color 9999s ease-out;
+  transition-delay: 9999s;
+  -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+  -webkit-transition-delay: 9999s;
 }
 
 .errorMessage {
   color: var(--orange);
   font-weight: 300;
-}
-
-.registerTitle {
-  font-weight: bold;
-  font-size: 48px;
-  line-height: 72px;
-  letter-spacing: 0.05em;
-  color: var(--white);
-}
-
-.registerSubtitle {
-  font-weight: 300;
-  font-size: 18px;
-  line-height: 27px;
-  letter-spacing: 0.05em;
-  color: var(--whiteish);
-  margin-bottom: 20px;
 }
 
 .label {
@@ -77,10 +50,13 @@
   color: var(--whiteish);
 }
 
+.link:hover {
+  color: var(--orange);
+}
+
 .submitButton {
-  width: calc(100% + 30px);
+  width: 100%;
   height: 60px;
-  margin-top: 30px;
   border: 3px solid var(--orange);
   background: none;
   display: flex;
@@ -100,7 +76,7 @@
 .labelContainer {
   height: 30px;
   margin: 5px 0;
-  width: calc(100% + 30px);
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;

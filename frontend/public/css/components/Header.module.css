@@ -82,3 +82,8 @@
 .headerTextContainer a:not(:last-of-type) {
   margin-right: 60px;
 }
+
+.logoutButton {
+  background: none;
+  border: none;
+}

@@ -9,9 +9,11 @@ import { useRouter } from "next/router";
 import NextLink from "next/link";
 import { Media } from "../components/Media";
 import { useLoginMutation } from "../generated/graphql";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const loginSchema = Yup.object().shape({
-  username: Yup.string()
+  usernameOrEmail: Yup.string()
     .min(3, "Too short!")
     .max(50, "Too long!")
     .required("Required"),
@@ -34,7 +36,7 @@ export const Login: React.FC<{}> = ({}) => {
           <h1 className={styles.loginTitle}>Hello, welcome back!</h1>
         </div>
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{ usernameOrEmail: "", password: "" }}
           validationSchema={loginSchema}
           onSubmit={async (values, { setErrors }) => {
             const response = await login(values);
@@ -50,19 +52,19 @@ export const Login: React.FC<{}> = ({}) => {
           {({ errors, touched }) => (
             <Form className={commonStyles.form}>
               <div className={commonStyles.labelContainer}>
-                <label htmlFor="username" className={commonStyles.label}>
+                <label htmlFor="usernameOrEmail" className={commonStyles.label}>
                   Username
                 </label>
-                {errors.username && touched.username ? (
+                {errors.usernameOrEmail && touched.usernameOrEmail ? (
                   <div className={commonStyles.errorMessage}>
-                    {errors.username}
+                    {errors.usernameOrEmail}
                   </div>
                 ) : null}
               </div>
               <Field
-                name="username"
-                placeholder="Your username"
-                autoComplete="username"
+                name="usernameOrEmail"
+                placeholder="Your username or email"
+                autoComplete="email"
               />
 
               <div className={commonStyles.labelContainer}>
@@ -100,4 +102,4 @@ export const Login: React.FC<{}> = ({}) => {
   );
 };
 
-export default Login;
+export default withUrqlClient(createUrqlClient)(Login);

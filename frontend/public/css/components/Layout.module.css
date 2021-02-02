@@ -1,3 +1,7 @@
+.defaultLayout {
+  color: var(--white);
+}
+
 .registerWrapper {
   position: absolute;
   top: 0;

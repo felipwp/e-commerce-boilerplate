@@ -1,18 +1,23 @@
+import NextLink from "next/link";
 import React from "react";
 import styles from "../../public/css/components/Header.module.css";
-import NextLink from "next/link";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { isServer } from "../utils/isServer";
 import Icon from "./Icon";
-import { useMeQuery } from "../generated/graphql";
 
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {
-  const [{ data, fetching }] = useMeQuery();
-  let body = (null);
+  const [, logout] = useLogoutMutation();
+  const [{ data, fetching }] = useMeQuery({
+    pause: isServer(),
+  });
+
+  let body = null;
 
   // dados carregando
   if (fetching) {
-    body = (null);
+    body = null;
 
     // usuário não está logado
   } else if (!data?.me) {
@@ -31,14 +36,25 @@ export const Header: React.FC<HeaderProps> = ({}) => {
     body = (
       <div className={styles.loggedUserContainer}>
         <NextLink href="/profile">
-          <a> <Icon name="user" /> </a>
+          <a>
+            {" "}
+            <Icon name="user" />{" "}
+          </a>
         </NextLink>
         <NextLink href="/cart">
-          <a> <Icon name="cart" /> </a>
+          <a>
+            {" "}
+            <Icon name="cart" />{" "}
+          </a>
         </NextLink>
-        <NextLink href="/logout">
-          <a> <Icon name="logout" /> </a>
-        </NextLink>
+        <button
+          className={styles.logoutButton}
+          onClick={() => {
+            logout();
+          }}
+        >
+          <Icon name="logout" />
+        </button>
       </div>
     );
   }
@@ -61,9 +77,7 @@ export const Header: React.FC<HeaderProps> = ({}) => {
             <NextLink href="/contact">Contact</NextLink>
           </div>
         </div>
-        <div className={styles.headerIcons}>
-          {body}
-        </div>
+        <div className={styles.headerIcons}>${body}</div>
       </header>
     </>
   );

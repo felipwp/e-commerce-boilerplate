@@ -3,7 +3,6 @@ import {
   Arg,
   Ctx,
   Field,
-  InputType,
   Mutation,
   ObjectType,
   Query,
@@ -13,15 +12,9 @@ import { MyContext } from "../types";
 import argon2 from "argon2";
 import { EntityManager } from "@mikro-orm/postgresql";
 import { COOKIE_NAME } from "../constants";
-
-@InputType()
-class UsernamePasswordInput {
-  @Field()
-  username: string;
-
-  @Field()
-  password: string;
-}
+import { UsernamePasswordInput } from "../utils/UsernamePasswordInput";
+import { validateRegistration } from "../utils/validateRegistration";
+import { sendEmail } from "src/utils/sendEmail";
 
 @ObjectType()
 class Error {
@@ -60,27 +53,12 @@ export class UserResolver {
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-    if (options.username.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "Username must have at least 3 characters",
-          },
-        ],
-      };
+    const errors = validateRegistration(options);
+
+    if (errors) {
+      return { errors };
     }
 
-    if (options.password.length <= 5) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "Password must have at least 6 characters",
-          },
-        ],
-      };
-    }
     const hashedPassword = await argon2.hash(options.password);
     let user;
 
@@ -90,6 +68,7 @@ export class UserResolver {
         .getKnexQuery()
         .insert({
           username: options.username,
+          email: options.email,
           password: hashedPassword,
           created_at: new Date(),
           updated_at: new Date(),
@@ -122,25 +101,29 @@ export class UserResolver {
   // mutation que realiza login
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("usernameOrEmail") usernameOrEmail: string,
+    @Arg("password") password: string,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(User, {
-      username: options.username.toLowerCase(),
-    });
+    const user = await em.findOne(
+      User,
+      usernameOrEmail.includes("@")
+        ? { email: usernameOrEmail }
+        : { username: usernameOrEmail }
+    );
 
     if (!user) {
       return {
         errors: [
           {
-            field: "username",
+            field: "usernameOrEmail",
             message: "This user does not exist",
           },
         ],
       };
     }
 
-    const valid = await argon2.verify(user.password, options.password);
+    const valid = await argon2.verify(user.password, password);
     if (!valid) {
       return {
         errors: [
@@ -170,5 +153,22 @@ export class UserResolver {
         resolve(true);
       })
     );
+  }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(@Arg("email") email: string, @Ctx() { em }: MyContext) {
+    const user = await em.findOne(User, { email });
+    if (!user) {
+      // o email não está cadastrado
+      return false;
+    }
+
+
+
+    sendEmail(
+      email,
+      `<a href="http://localhost:3000/change-password/9898123sdfas123">Reset your password</a>`
+    );
+    return true;
   }
 }

@@ -1,19 +1,17 @@
-import React from "react";
-import { Layout } from "../components/Layout";
-import styles from "../../public/css/pages/register.module.css";
-import commonStyles from "../../public/css/common.module.css";
 import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { useRegisterMutation } from "../generated/graphql";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from "next/router";
+import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import * as Yup from "yup";
+import commonStyles from "../../public/css/common.module.css";
+import styles from "../../public/css/pages/register.module.css";
+import { Layout } from "../components/Layout";
+import { useRegisterMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { toErrorMap } from "../utils/toErrorMap";
 
-interface registerProps {
-  username: string;
-  password: string;
-  email: string;
-}
+interface registerProps {}
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -31,12 +29,6 @@ export const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
 
-  const initialValues: registerProps = {
-    username: "",
-    password: "",
-    email: "",
-  };
-
   return (
     <Layout style="registerWrapper">
       <aside className={styles.registrationContainer}>
@@ -47,11 +39,15 @@ export const Register: React.FC<registerProps> = ({}) => {
           </h2>
         </div>
         <Formik
-          initialValues={initialValues}
+          initialValues={{
+            username: "",
+            password: "",
+            email: "",
+          }}
           validationSchema={RegisterSchema}
           onSubmit={async (values, { setErrors }) => {
             console.log({ values });
-            const response = await register(values);
+            const response = await register({ options: values });
 
             console.log("response: ", response);
 
@@ -124,9 +120,8 @@ export const Register: React.FC<registerProps> = ({}) => {
           )}
         </Formik>
       </aside>
-      <main></main>
     </Layout>
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);

@@ -60,3 +60,7 @@ body::-webkit-scrollbar-thumb {
   align-items: flex-start;
   justify-content: center;
 }
+
+.direction-column {
+  flex-direction: column;
+}

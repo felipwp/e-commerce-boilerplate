@@ -17,7 +17,8 @@ const main = async () => {
   // conecta na db
   const orm = await MikroORM.init(microConfig);
   // verifica se existe alguma migração para ser feita
-  await orm.getMigrator().up();
+  // await orm.getMigrator().up();
+  // orm.em.nativeDelete("mikro_orm_migrations", {})
 
   const app = express();
 

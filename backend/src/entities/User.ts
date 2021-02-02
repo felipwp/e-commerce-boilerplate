@@ -21,6 +21,14 @@ export class User {
     @Property({ type: 'text', unique: true })
     username!: string;
 
+    @Field()
+    @Property({ type: 'text', unique: true })
+    email!: string;
+
+    @Field(() => Boolean)
+    @Property({ default: false })
+    isAdmin!: boolean;
+
     // removido o @Field, para que não seja possível pegar este campo
     // em uma query GraphQL
     // ainda continua sendo uma coluna da tabela

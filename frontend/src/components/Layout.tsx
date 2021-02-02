@@ -11,7 +11,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, style, css }) => {
   return (
     <>
       <Header />
-      <div className={`${styles[`${style}`]} ${css}`}>
+      <div className={`${styles[`${style}`]} ${css} ${styles.defaultLayout}`}>
         {children}
       </div>
     </>

@@ -1,0 +1,8 @@
+query GetAllProducts{
+  getAllProducts {
+    id
+    createdAt
+    updatedAt
+    name
+  }
+}

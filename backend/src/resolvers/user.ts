@@ -163,11 +163,12 @@ export class UserResolver {
       return false;
     }
 
-
+    
+    const token = "sexolol13123"
 
     sendEmail(
       email,
-      `<a href="http://localhost:3000/change-password/9898123sdfas123">Reset your password</a>`
+      `<a href="http://localhost:3000/change-password/${token}">Reset your password</a>`
     );
     return true;
   }

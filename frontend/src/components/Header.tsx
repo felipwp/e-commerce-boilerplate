@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({}) => {
             <NextLink href="/contact">Contact</NextLink>
           </div>
         </div>
-        <div className={styles.headerIcons}>${body}</div>
+        <div className={styles.headerIcons}>{body}</div>
       </header>
     </>
   );

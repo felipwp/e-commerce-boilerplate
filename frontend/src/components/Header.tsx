@@ -63,12 +63,14 @@ export const Header: React.FC<HeaderProps> = ({}) => {
     <>
       <header className={styles.header}>
         <div className={styles.container}>
-          <img
-            src="/assets/img/logo.png"
-            width={70}
-            height={70}
-            className={styles.headerLogo}
-          />
+          <NextLink href="/">
+            <img
+              src="/assets/img/logo.png"
+              width={70}
+              height={70}
+              className={styles.headerLogo}
+            />
+          </NextLink>
           <div className={styles.headerTextContainer}>
             <NextLink href="/">Home</NextLink>
             <NextLink href="/portfolio">Portfolio</NextLink>

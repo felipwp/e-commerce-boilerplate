@@ -11,7 +11,6 @@ import { useRegisterMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
 
-interface registerProps {}
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -22,10 +21,12 @@ const RegisterSchema = Yup.object().shape({
     .min(6, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Required"),
 });
 
-export const Register: React.FC<registerProps> = ({}) => {
+export const Register: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
 
@@ -48,8 +49,6 @@ export const Register: React.FC<registerProps> = ({}) => {
           onSubmit={async (values, { setErrors }) => {
             console.log({ values });
             const response = await register({ options: values });
-
-            console.log("response: ", response);
 
             if (response.data?.register.errors) {
               setErrors(toErrorMap(response.data.register.errors));

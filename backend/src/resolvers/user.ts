@@ -1,4 +1,5 @@
-import { User } from "../entities/user";
+import { EntityManager } from "@mikro-orm/postgresql";
+import argon2 from "argon2";
 import {
   Arg,
   Ctx,
@@ -6,15 +7,15 @@ import {
   Mutation,
   ObjectType,
   Query,
-  Resolver,
+  Resolver
 } from "type-graphql";
+import { v4 } from "uuid";
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
+import { User } from "../entities/user";
 import { MyContext } from "../types";
-import argon2 from "argon2";
-import { EntityManager } from "@mikro-orm/postgresql";
-import { COOKIE_NAME } from "../constants";
+import { sendEmail } from "../utils/sendEmail";
 import { UsernamePasswordInput } from "../utils/UsernamePasswordInput";
 import { validateRegistration } from "../utils/validateRegistration";
-import { sendEmail } from "src/utils/sendEmail";
 
 @ObjectType()
 class Error {
@@ -156,20 +157,75 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async forgotPassword(@Arg("email") email: string, @Ctx() { em }: MyContext) {
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() { em, redis }: MyContext
+  ) {
     const user = await em.findOne(User, { email });
     if (!user) {
       // o email não está cadastrado
       return false;
     }
 
-    
-    const token = "sexolol13123"
+    const token = v4();
+
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24 * 3
+    ); // token válido por 3 dias
 
     sendEmail(
       email,
       `<a href="http://localhost:3000/change-password/${token}">Reset your password</a>`
     );
     return true;
+  }
+
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { redis, em, req }: MyContext
+  ): Promise<UserResponse> {
+
+    const key = FORGET_PASSWORD_PREFIX + token;
+    const userId = await redis.get(key);
+
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "Token expired",
+          },
+        ],
+      };
+    }
+
+    const user = await em.findOne(User, {id: parseInt(userId)});
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "User no longer exists",
+          },
+        ],
+      };
+    }
+
+    user.password = await argon2.hash(newPassword);
+    await em.persistAndFlush(user);
+
+    // limpando a chave do redis, para que o usuário não possa trocar a senha com o mesmo token mais de uma vez
+    await redis.del(key)
+
+    // logar o usuário após a troca de senha
+    req.session.userId = user.id;
+
+    return { user };
   }
 }

@@ -18,6 +18,10 @@
     box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
+.form input:focus {
+  border-color: var(--orange);
+}
+
 
 /* para o autofill do navegador não ficar branco, arruinando a estética da página */
 .form input:-webkit-autofill,
@@ -33,6 +37,16 @@
 .errorMessage {
   color: var(--orange);
   font-weight: 300;
+}
+
+.labelLink {
+  color: var(--white);
+  font-weight: 300;
+}
+
+.labelLink:hover {
+  cursor: pointer;
+  color: var(--orange);
 }
 
 .label {
@@ -80,4 +94,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.resetMessageContainer {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-top: 30px;
+  font-weight: 300;
+  margin-bottom: -50px;
 }

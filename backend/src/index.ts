@@ -1,16 +1,16 @@
-import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
-import { COOKIE_NAME, __prod__ } from "./constants";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import microConfig from "./mikro-orm.config";
+import connectRedis from "connect-redis";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import Redis from "ioredis";
+import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { COOKIE_NAME } from "./constants";
+import microConfig from "./mikro-orm.config";
 import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
-import connectRedis from "connect-redis";
-import redis from "redis";
-import session from "express-session";
-import cors from "cors";
 
 // função usada para não precisar setar o arquivo todo como assíncrono
 const main = async () => {
@@ -23,7 +23,7 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redis = new Redis();
 
   // pra aplicar o CORS em todas as rotas
   app.use(
@@ -37,7 +37,7 @@ const main = async () => {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
         disableTTL: true,
       }),
@@ -58,7 +58,7 @@ const main = async () => {
       resolvers: [ProductResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: orm.em, req, res }),
+    context: ({ req, res }) => ({ em: orm.em, req, res, redis }),
   });
 
   apolloServer.applyMiddleware({

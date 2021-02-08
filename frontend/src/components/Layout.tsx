@@ -1,6 +1,6 @@
 import React from "react";
-import { Header } from "./Header";
 import styles from "../../public/css/components/Layout.module.css";
+import { Header } from "./Header";
 
 interface LayoutProps {
   style?: string;

@@ -1,16 +1,16 @@
-import React from "react";
-import { Layout } from "../components/Layout";
-import styles from "../../public/css/pages/login.module.css";
-import commonStyles from "../../public/css/common.module.css";
 import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from "next/router";
+import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import * as Yup from "yup";
+import commonStyles from "../../public/css/common.module.css";
+import styles from "../../public/css/pages/login.module.css";
+import { Layout } from "../components/Layout";
 import { Media } from "../components/Media";
 import { useLoginMutation } from "../generated/graphql";
-import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { toErrorMap } from "../utils/toErrorMap";
 
 const loginSchema = Yup.object().shape({
   usernameOrEmail: Yup.string()

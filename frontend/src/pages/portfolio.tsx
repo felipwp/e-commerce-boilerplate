@@ -1,11 +1,11 @@
-import { withUrqlClient } from "next-urql";
-import { Layout } from "../components/Layout";
-import { useGetAllProductsQuery } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import styles from "../../public/css/pages/portfolio.module.css";
+import { withUrqlClient } from 'next-urql'
+import styles from '../../public/css/pages/portfolio.module.css'
+import { Layout } from '../components/Layout'
+import { useGetAllProductsQuery } from '../generated/graphql'
+import { createUrqlClient } from '../utils/createUrqlClient'
 
 const Portfolio = () => {
-  const [{ data }] = useGetAllProductsQuery();
+  const [{ data }] = useGetAllProductsQuery()
 
   return (
     <Layout style="indexWrapper">
@@ -27,7 +27,7 @@ const Portfolio = () => {
       </div>
       {/* )} */}
     </Layout>
-  );
-};
+  )
+}
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Portfolio);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Portfolio)

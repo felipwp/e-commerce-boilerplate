@@ -14,6 +14,10 @@
   margin-right: 192px;
 }
 
+.headerLogo:hover {
+  cursor: pointer;
+}
+
 .container {
   display: flex;
   align-items: center;

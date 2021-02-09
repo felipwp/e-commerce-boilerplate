@@ -16,14 +16,6 @@ export class User extends BaseEntity {
   id!: number;
 
   @Field(() => String)
-  @CreateDateColumn()
-  createdAt = Date;
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = Date;
-
-  @Field(() => String)
   @Column({ unique: true })
   username!: string;
 
@@ -40,4 +32,12 @@ export class User extends BaseEntity {
   // ainda continua sendo uma coluna da tabela
   @Column({ type: "text" })
   password!: string;
+
+  @Field(() => String)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

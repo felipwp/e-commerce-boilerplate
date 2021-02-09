@@ -16,14 +16,14 @@ export class Product extends BaseEntity {
   id!: number;
 
   @Field(() => String)
+  @Column()
+  name!: string;
+
+  @Field(() => String)
   @CreateDateColumn()
-  createdAt = Date;
+  createdAt: Date;
 
   @Field(() => String)
   @UpdateDateColumn()
-  updatedAt = Date;
-
-  @Field(() => String)
-  @Column()
-  name!: string;
+  updatedAt: Date;
 }

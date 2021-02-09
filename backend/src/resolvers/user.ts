@@ -8,7 +8,6 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { getConnection } from "typeorm";
 import { v4 } from "uuid";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { User } from "../entities/user";
@@ -63,21 +62,13 @@ export class UserResolver {
     let user;
 
     try {
-      const result = await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({
-          username: options.username,
-          email: options.email,
-          password: hashedPassword,
-        })
-        .returning("*")
-        .execute();
-
-      console.log(result);
-      user = result.raw[0];
+      user = await User.create({
+        username: options.username,
+        email: options.email,
+        password: hashedPassword,
+      }).save();
     } catch (error) {
+      console.log(error);
       // caso o usuário já exista na db
       if (error.code === "23505") {
         return {
@@ -93,7 +84,7 @@ export class UserResolver {
     }
 
     // vai logar o usuário automaticamente após finalizar o registro
-    req.session.userId = user.id;
+    req.session.userId = user ? user.id : undefined;
 
     return { user };
   }

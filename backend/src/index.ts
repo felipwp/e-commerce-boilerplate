@@ -9,7 +9,7 @@ import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { COOKIE_NAME } from "./constants";
 import { Product } from "./entities/product";
-import { User } from "./entities/User";
+import { User } from "./entities/user";
 import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
 
@@ -22,7 +22,7 @@ const main = async () => {
     password: "admin",
     logging: true,
     synchronize: true,
-    entities: [Product, User],
+    entities: [User, Product],
   });
 
   const app = express();

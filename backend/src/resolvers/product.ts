@@ -20,7 +20,6 @@ export class ProductResolver {
   // Cria um produto
   @Mutation(() => Product)
   async createProduct(@Arg("name") name: string): Promise<Product> {
-    // 2 queries no banco (um INSERT e um SELECT no produto cadastrado)
     return Product.create({ name }).save();
   }
 

@@ -13,15 +13,14 @@
   padding: 2px 15px 0px 15px;
   width: 100%;
   color: var(--white);
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;         /* Opera/IE 8+ */
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
 }
 
 .form input:focus {
   border-color: var(--orange);
 }
-
 
 /* para o autofill do navegador não ficar branco, arruinando a estética da página */
 .form input:-webkit-autofill,

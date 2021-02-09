@@ -1,4 +1,3 @@
-import { EntityManager } from "@mikro-orm/postgresql";
 import argon2 from "argon2";
 import {
   Arg,
@@ -7,8 +6,9 @@ import {
   Mutation,
   ObjectType,
   Query,
-  Resolver
+  Resolver,
 } from "type-graphql";
+import { getConnection } from "typeorm";
 import { v4 } from "uuid";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { User } from "../entities/user";
@@ -40,19 +40,18 @@ class UserResponse {
 export class UserResolver {
   // query para verificar se o usuário está logado
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req, em }: MyContext) {
+  me(@Ctx() { req }: MyContext) {
     // nenhum usuário logado
     if (!req.session.userId) return null;
 
-    const user = await em.findOne(User, { id: req.session.userId });
-    return user;
+    return User.findOne(req.session.userId);
   }
 
   // mutation que registra um novo usuário na db
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateRegistration(options);
 
@@ -64,20 +63,20 @@ export class UserResolver {
     let user;
 
     try {
-      const result = await (em as EntityManager)
-        .createQueryBuilder(User)
-        .getKnexQuery()
-        .insert({
+      const result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
           username: options.username,
           email: options.email,
           password: hashedPassword,
-          created_at: new Date(),
-          updated_at: new Date(),
         })
-        .returning("*");
-      user = result[0];
-      user.createdAt = result[0].created_at;
-      user.updatedAt = result[0].updated_at;
+        .returning("*")
+        .execute();
+
+      console.log(result);
+      user = result.raw[0];
     } catch (error) {
       // caso o usuário já exista na db
       if (error.code === "23505") {
@@ -104,13 +103,12 @@ export class UserResolver {
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
-    @Ctx() { em, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(
-      User,
+    const user = await User.findOne(
       usernameOrEmail.includes("@")
-        ? { email: usernameOrEmail }
-        : { username: usernameOrEmail }
+        ? { where: { email: usernameOrEmail } }
+        : { where: { username: usernameOrEmail } }
     );
 
     if (!user) {
@@ -159,9 +157,11 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
-    @Ctx() { em, redis }: MyContext
+    @Ctx() { redis }: MyContext
   ) {
-    const user = await em.findOne(User, { email });
+    // é necessário usar o where, pois o email não é primary key
+    const user = await User.findOne({ where: { email } });
+
     if (!user) {
       // o email não está cadastrado
       return false;
@@ -187,9 +187,8 @@ export class UserResolver {
   async changePassword(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
-    @Ctx() { redis, em, req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<UserResponse> {
-
     const key = FORGET_PASSWORD_PREFIX + token;
     const userId = await redis.get(key);
 
@@ -204,7 +203,8 @@ export class UserResolver {
       };
     }
 
-    const user = await em.findOne(User, {id: parseInt(userId)});
+    const userIdNumber = parseInt(userId);
+    const user = await User.findOne(userIdNumber);
 
     if (!user) {
       return {
@@ -217,11 +217,15 @@ export class UserResolver {
       };
     }
 
-    user.password = await argon2.hash(newPassword);
-    await em.persistAndFlush(user);
+    await User.update(
+      { id: userIdNumber },
+      {
+        password: await argon2.hash(newPassword),
+      }
+    );
 
     // limpando a chave do redis, para que o usuário não possa trocar a senha com o mesmo token mais de uma vez
-    await redis.del(key)
+    await redis.del(key);
 
     // logar o usuário após a troca de senha
     req.session.userId = user.id;

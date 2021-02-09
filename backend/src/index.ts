@@ -1,4 +1,3 @@
-import { MikroORM } from "@mikro-orm/core";
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
@@ -7,18 +6,24 @@ import session from "express-session";
 import Redis from "ioredis";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
 import { COOKIE_NAME } from "./constants";
-import microConfig from "./mikro-orm.config";
+import { Product } from "./entities/product";
+import { User } from "./entities/User";
 import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
 
 // função usada para não precisar setar o arquivo todo como assíncrono
 const main = async () => {
-  // conecta na db
-  const orm = await MikroORM.init(microConfig);
-  // verifica se existe alguma migração para ser feita
-  // await orm.getMigrator().up();
-  // orm.em.nativeDelete("mikro_orm_migrations", {})
+  const conn = await createConnection({
+    type: "postgres",
+    database: "ecommerce2",
+    username: "postgres",
+    password: "admin",
+    logging: true,
+    synchronize: true,
+    entities: [Product, User],
+  });
 
   const app = express();
 
@@ -58,7 +63,7 @@ const main = async () => {
       resolvers: [ProductResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }) => ({ req, res, redis }),
   });
 
   apolloServer.applyMiddleware({

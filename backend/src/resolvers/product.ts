@@ -1,5 +1,29 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Field,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { Product } from "../entities/product";
+import { isAdmin } from "../middleware/isAdmin";
+
+@InputType()
+class ProductInput {
+  @Field()
+  name!: string;
+
+  @Field()
+  description: string;
+
+  @Field()
+  url: string;
+
+  @Field()
+  price: number;
+}
 
 @Resolver()
 export class ProductResolver {
@@ -19,12 +43,16 @@ export class ProductResolver {
 
   // Cria um produto
   @Mutation(() => Product)
-  async createProduct(@Arg("name") name: string): Promise<Product> {
-    return Product.create({ name }).save();
+  @UseMiddleware(isAdmin)
+  async createProduct(@Arg("input") input: ProductInput): Promise<Product> {
+    return Product.create({
+      ...input,
+    }).save();
   }
 
   // Atualiza um produto
   @Mutation(() => Product, { nullable: true })
+  @UseMiddleware(isAdmin)
   async updateProduct(
     @Arg("id") id: number,
     // toda vez que um campo possa ser editado ou não, deve-se adicionar
@@ -46,6 +74,7 @@ export class ProductResolver {
 
   // Deleta um Produto
   @Mutation(() => Boolean)
+  @UseMiddleware(isAdmin)
   async deleteProduct(@Arg("id") id: number): Promise<boolean> {
     await Product.delete(id);
     return true;

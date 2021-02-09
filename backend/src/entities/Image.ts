@@ -4,34 +4,35 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { PortfolioItem } from "./PortfolioItem";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class Image extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
-  @Column({ unique: true })
-  username!: string;
-
-  @Field()
-  @Column({ unique: true })
-  email!: string;
-
-  @Field()
-  @Column({ default: false })
-  isAdmin!: boolean;
-
-  // removido o @Field, para que não seja possível "pegar" este campo
-  // em uma query GraphQL
-  // ainda continua sendo uma coluna da tabela
   @Column()
-  password!: string;
+  description: string;
+
+  @Field()
+  @Column()
+  url!: string;
+
+  @Field()
+  @Column()
+  portfolioItemId: number;
+
+  @ManyToOne(() => PortfolioItem, (portfolioItem) => portfolioItem.images, {
+    onDelete: "CASCADE",
+  })
+  portfolioItem: PortfolioItem;
 
   @Field(() => String)
   @CreateDateColumn()

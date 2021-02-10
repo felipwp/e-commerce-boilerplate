@@ -28,7 +28,7 @@ export class Product extends BaseEntity {
   url: string;
 
   @Field()
-  @Column({ type: "decimal", scale: 2 }) // decimal com 2 casas
+  @Column()
   price: number;
 
   @Field(() => String)

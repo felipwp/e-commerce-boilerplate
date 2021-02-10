@@ -20,10 +20,13 @@ const main = async () => {
     database: "ecommerce2",
     username: "postgres",
     password: "admin",
-    logging: true,
     synchronize: true,
+    logging: true,
     entities: [User, Product],
   });
+
+  // Limpar a tabela de produtos:
+  // Product.delete({});
 
   const app = express();
 

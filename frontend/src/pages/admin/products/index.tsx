@@ -1,9 +1,10 @@
 import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 import React from "react";
-import commonStyles from "../../../public/css/pages/admin/common.module.css";
-import styles from "../../../public/css/pages/admin/products.module.css";
-import { Layout } from "../../components/Layout";
-import { createUrqlClient } from "../../utils/createUrqlClient";
+import commonStyles from "../../../../public/css/pages/admin/common.module.css";
+import styles from "../../../../public/css/pages/admin/products.module.css";
+import { Layout } from "../../../components/Layout";
+import { createUrqlClient } from "../../../utils/createUrqlClient";
 
 export const Products: React.FC<{}> = ({}) => {
   const body = (
@@ -39,7 +40,9 @@ export const Products: React.FC<{}> = ({}) => {
               <input placeholder="Search..."></input>
               <button>GO</button>
             </div>
-            <button className={commonStyles.newItemButton}>NEW ITEM</button>
+            <NextLink href="/admin/products/add">
+              <a className={commonStyles.newItemButton}>NEW ITEM</a>
+            </NextLink>
           </div>
         </div>
         <div className={commonStyles.mainContainer}>

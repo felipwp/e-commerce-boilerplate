@@ -8,7 +8,10 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { COOKIE_NAME } from "./constants";
-import { Product } from "./entities/product";
+import { PortfolioImage } from "./entities/PortfolioImage";
+import { PortfolioItem } from "./entities/PortfolioItem";
+import { Product } from "./entities/Product";
+import { ProductImage } from "./entities/ProductImage";
 import { User } from "./entities/user";
 import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
@@ -20,9 +23,9 @@ const main = async () => {
     database: "ecommerce2",
     username: "postgres",
     password: "admin",
-    synchronize: true,
+    // synchronize: true,
     logging: true,
-    entities: [User, Product],
+    entities: [User, Product, ProductImage, PortfolioItem, PortfolioImage],
   });
 
   // Limpar a tabela de produtos:

@@ -12,7 +12,7 @@ import { PortfolioItem } from "./PortfolioItem";
 
 @ObjectType()
 @Entity()
-export class Image extends BaseEntity {
+export class PortfolioImage extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;

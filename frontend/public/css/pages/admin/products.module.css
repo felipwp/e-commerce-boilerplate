@@ -1,3 +1,4 @@
 .productsTable tbody td p {
   font-size: 0.75rem;
+  color: var(--whitent);
 }

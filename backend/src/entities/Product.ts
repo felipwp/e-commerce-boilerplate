@@ -4,9 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { ProductImage } from "./ProductImage";
 
 @ObjectType()
 @Entity()
@@ -30,6 +32,9 @@ export class Product extends BaseEntity {
   @Field()
   @Column()
   price: number;
+
+  @OneToMany(() => ProductImage, (image) => image.product)
+  images: ProductImage[];
 
   @Field(() => String)
   @CreateDateColumn()

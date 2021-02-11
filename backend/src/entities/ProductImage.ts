@@ -4,22 +4,18 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { PortfolioImage } from "./PortfolioImage";
+import { Product } from "./Product";
 
 @ObjectType()
 @Entity()
-export class PortfolioItem extends BaseEntity {
+export class ProductImage extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @Field()
-  @Column()
-  name!: string;
 
   @Field()
   @Column()
@@ -27,10 +23,16 @@ export class PortfolioItem extends BaseEntity {
 
   @Field()
   @Column()
-  shareableUrl: string;
+  url!: string;
 
-  @OneToMany(() => PortfolioImage, (image) => image.portfolioItem)
-  images: PortfolioImage[];
+  @Field()
+  @Column()
+  productId: number;
+
+  @ManyToOne(() => Product, (product) => product.images, {
+    onDelete: "CASCADE",
+  })
+  product: Product;
 
   @Field(() => String)
   @CreateDateColumn()

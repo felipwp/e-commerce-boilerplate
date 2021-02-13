@@ -1,11 +1,12 @@
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import * as Yup from "yup";
-import commonStyles from "../../public/css/common.module.css";
+import formStyles from "../../public/css/form.module.css";
 import styles from "../../public/css/pages/login.module.css";
+import { Input } from "../components/Input";
 import { Layout } from "../components/Layout";
 import { Media } from "../components/Media";
 import { useLoginMutation } from "../generated/graphql";
@@ -50,34 +51,20 @@ export const Login: React.FC<{}> = ({}) => {
           }}
         >
           {({ errors, touched }) => (
-            <Form className={commonStyles.form}>
-              <div className={commonStyles.labelContainer}>
-                <label htmlFor="usernameOrEmail" className={commonStyles.label}>
-                  Username
-                </label>
-                {errors.usernameOrEmail && touched.usernameOrEmail ? (
-                  <div className={commonStyles.errorMessage}>
-                    {errors.usernameOrEmail}
-                  </div>
-                ) : null}
-              </div>
-              <Field
+            <Form className={formStyles.form}>
+              <Input
+                errors={errors.usernameOrEmail}
+                touched={touched.usernameOrEmail}
+                label="Username or Email"
                 name="usernameOrEmail"
                 placeholder="Your username or email"
                 autoComplete="email"
               />
 
-              <div className={commonStyles.labelContainer}>
-                <label htmlFor="password" className={commonStyles.label}>
-                  Password
-                </label>
-                {errors.password && touched.password ? (
-                  <div className={commonStyles.errorMessage}>
-                    {errors.password}
-                  </div>
-                ) : null}
-              </div>
-              <Field
+              <Input
+                errors={errors.password}
+                touched={touched.password}
+                label="Password"
                 name="password"
                 type="password"
                 placeholder="Your password"
@@ -88,7 +75,7 @@ export const Login: React.FC<{}> = ({}) => {
                 <NextLink href="/forgot-password">
                   Forgot your password?
                 </NextLink>
-                <button className={commonStyles.submitButton} type="submit">
+                <button className={formStyles.submitButton} type="submit">
                   Submit
                 </button>
                 <NextLink href="/register">Create an account</NextLink>

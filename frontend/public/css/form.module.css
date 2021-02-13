@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
 }
 
 .form input {
@@ -104,4 +105,34 @@
   margin-top: 30px;
   font-weight: 300;
   margin-bottom: -50px;
+}
+
+.textArea {
+  background: var(--darkest);
+  border-style: solid;
+  border-color: var(--black);
+  border-width: 0px 0px 2px 0px;
+  height: 8em;
+  padding: 10px 15px;
+  width: 100%;
+  color: var(--white);
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
+}
+
+.submitButton {
+  width: 20%;
+  align-self: flex-end;
+  text-transform: uppercase;
+  height: 50px;
+  box-shadow: var(--box-shadow);
+  font-size: 1rem;
+  border: solid 3px var(--orange);
+  background: none;
+  font-weight: 600;
+  padding: 0 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

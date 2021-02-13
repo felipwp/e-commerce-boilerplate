@@ -19,10 +19,6 @@ export class ProductImage extends BaseEntity {
 
   @Field()
   @Column()
-  description: string;
-
-  @Field()
-  @Column()
   url!: string;
 
   @Field()

@@ -1,16 +1,16 @@
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import * as Yup from "yup";
-import commonStyles from "../../public/css/common.module.css";
+import formStyles from "../../public/css/form.module.css";
 import styles from "../../public/css/pages/register.module.css";
+import { Input } from "../components/Input";
 import { Layout } from "../components/Layout";
 import { useRegisterMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
-
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -21,9 +21,7 @@ const RegisterSchema = Yup.object().shape({
     .min(6, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Required"),
+  email: Yup.string().email("Invalid email").required("Required"),
 });
 
 export const Register: React.FC<{}> = ({}) => {
@@ -59,51 +57,30 @@ export const Register: React.FC<{}> = ({}) => {
           }}
         >
           {({ errors, touched }) => (
-            <Form className={commonStyles.form}>
-              <div className={commonStyles.labelContainer}>
-                <label htmlFor="username" className={commonStyles.label}>
-                  Username
-                </label>
-                {errors.username && touched.username ? (
-                  <div className={commonStyles.errorMessage}>
-                    {errors.username}
-                  </div>
-                ) : null}
-              </div>
-              <Field
+            <Form className={formStyles.form}>
+              <Input
+                errors={errors.username}
+                touched={touched.username}
+                label="Username"
                 name="username"
                 placeholder="Your username"
                 autoComplete="username"
               />
 
-              <div className={commonStyles.labelContainer}>
-                <label htmlFor="password" className={commonStyles.label}>
-                  Password
-                </label>
-                {errors.password && touched.password ? (
-                  <div className={commonStyles.errorMessage}>
-                    {errors.password}
-                  </div>
-                ) : null}
-              </div>
-              <Field
+              <Input
+                errors={errors.password}
+                touched={touched.password}
+                label="Password"
                 name="password"
                 type="password"
                 placeholder="Your password"
                 autoComplete="password"
               />
 
-              <div className={commonStyles.labelContainer}>
-                <label htmlFor="email" className={commonStyles.label}>
-                  Email
-                </label>
-                {errors.email && touched.email ? (
-                  <div className={commonStyles.errorMessage}>
-                    {errors.email}
-                  </div>
-                ) : null}
-              </div>
-              <Field
+              <Input
+                errors={errors.email}
+                touched={touched.email}
+                label="Email"
                 name="email"
                 type="email"
                 placeholder="Your email"
@@ -112,7 +89,7 @@ export const Register: React.FC<{}> = ({}) => {
 
               <NextLink href="/login">Already have an account?</NextLink>
 
-              <button className={commonStyles.submitButton} type="submit">
+              <button className={formStyles.submitButton} type="submit">
                 Submit
               </button>
             </Form>

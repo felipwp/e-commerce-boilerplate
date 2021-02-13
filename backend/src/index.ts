@@ -3,6 +3,7 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 import express from "express";
 import session from "express-session";
+import { graphqlUploadExpress } from "graphql-upload";
 import Redis from "ioredis";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
@@ -12,7 +13,7 @@ import { PortfolioImage } from "./entities/PortfolioImage";
 import { PortfolioItem } from "./entities/PortfolioItem";
 import { Product } from "./entities/Product";
 import { ProductImage } from "./entities/ProductImage";
-import { User } from "./entities/user";
+import { User } from "./entities/User";
 import { ProductResolver } from "./resolvers/product";
 import { UserResolver } from "./resolvers/user";
 
@@ -32,6 +33,8 @@ const main = async () => {
   // Product.delete({});
 
   const app = express();
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   const RedisStore = connectRedis(session);
   const redis = new Redis();
@@ -70,6 +73,7 @@ const main = async () => {
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),
+    uploads: false,
   });
 
   apolloServer.applyMiddleware({

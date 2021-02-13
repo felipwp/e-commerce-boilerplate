@@ -27,6 +27,10 @@ export class Product extends BaseEntity {
 
   @Field()
   @Column()
+  size: string;
+
+  @Field()
+  @Column()
   url: string;
 
   @Field()

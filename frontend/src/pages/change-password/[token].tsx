@@ -5,7 +5,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import commonStyles from "../../../public/css/common.module.css";
+import formStyles from "../../../public/css/form.module.css";
 import styles from "../../../public/css/pages/register.module.css";
 import { Layout } from "../../components/Layout";
 import { useChangePasswordMutation } from "../../generated/graphql";
@@ -17,11 +17,9 @@ const ChangePasswordSchema = Yup.object().shape({
     .min(6, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  passwordConfirmation: Yup.string().oneOf(
-    [Yup.ref("newPassword"), null],
-    "Passwords must match",)
-    .required("Required")
-
+  passwordConfirmation: Yup.string()
+    .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+    .required("Required"),
 });
 
 export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
@@ -53,7 +51,9 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
               });
 
               if (response.data?.changePassword.errors) {
-                const errorMap = toErrorMap(response.data.changePassword.errors);
+                const errorMap = toErrorMap(
+                  response.data.changePassword.errors
+                );
 
                 if ("token" in errorMap) {
                   setTokenError(errorMap.token);
@@ -66,27 +66,27 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
             }}
           >
             {({ errors, touched }) => (
-              <Form className={commonStyles.form}>
-                <div className={commonStyles.labelContainer}>
+              <Form className={formStyles.form}>
+                <div className={formStyles.labelContainer}>
                   {tokenError ? (
                     <>
-                      <div className={commonStyles.errorMessage}>
+                      <div className={formStyles.errorMessage}>
                         {tokenError}
                       </div>
-                      <NextLink href="/forgot-password" >
-                        <p className={commonStyles.labelLink}>
+                      <NextLink href="/forgot-password">
+                        <p className={formStyles.labelLink}>
                           Click here to get a new one
                         </p>
                       </NextLink>
                     </>
                   ) : null}
                 </div>
-                <div className={commonStyles.labelContainer}>
-                  <label htmlFor="newPassword" className={commonStyles.label}>
+                <div className={formStyles.labelContainer}>
+                  <label htmlFor="newPassword" className={formStyles.label}>
                     Password
                   </label>
                   {errors.newPassword && touched.newPassword ? (
-                    <div className={commonStyles.errorMessage}>
+                    <div className={formStyles.errorMessage}>
                       {errors.newPassword}
                     </div>
                   ) : null}
@@ -97,15 +97,16 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
                   placeholder="Your new password"
                   autoComplete="newPassword"
                 />
-                <div className={commonStyles.labelContainer}>
+                <div className={formStyles.labelContainer}>
                   <label
                     htmlFor="passwordConfirmation"
-                    className={commonStyles.label}
+                    className={formStyles.label}
                   >
                     Confirm your password
                   </label>
-                  {errors.passwordConfirmation && touched.passwordConfirmation ? (
-                    <div className={commonStyles.errorMessage}>
+                  {errors.passwordConfirmation &&
+                  touched.passwordConfirmation ? (
+                    <div className={formStyles.errorMessage}>
                       {errors.passwordConfirmation}
                     </div>
                   ) : null}
@@ -118,7 +119,7 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
                 />
 
                 <button
-                  className={commonStyles.submitButton}
+                  className={formStyles.submitButton}
                   type="submit"
                   style={{ marginTop: "30px" }}
                 >

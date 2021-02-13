@@ -3,7 +3,7 @@ import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import commonStyles from "../../public/css/common.module.css";
+import formStyles from "../../public/css/form.module.css";
 import styles from "../../public/css/pages/login.module.css";
 import { Layout } from "../components/Layout";
 import { Media } from "../components/Media";
@@ -35,15 +35,13 @@ export const forgotPassword: React.FC<{}> = ({}) => {
           }}
         >
           {({ errors, touched }) => (
-            <Form className={commonStyles.form}>
-              <div className={commonStyles.labelContainer}>
-                <label htmlFor="email" className={commonStyles.label}>
+            <Form className={formStyles.form}>
+              <div className={formStyles.labelContainer}>
+                <label htmlFor="email" className={formStyles.label}>
                   E-mail
                 </label>
                 {errors.email && touched.email ? (
-                  <div className={commonStyles.errorMessage}>
-                    {errors.email}
-                  </div>
+                  <div className={formStyles.errorMessage}>{errors.email}</div>
                 ) : null}
               </div>
               <Field
@@ -53,14 +51,17 @@ export const forgotPassword: React.FC<{}> = ({}) => {
               />
 
               <div className={styles.loginBottomContainer}>
-                <button className={commonStyles.submitButton} type="submit">
+                <button className={formStyles.submitButton} type="submit">
                   Submit
                 </button>
                 <NextLink href="/register">Create an account</NextLink>
               </div>
-              <div className={commonStyles.resetMessageContainer} >
-                {complete? (
-                  <>If an account with that email exists, a password reset URL was sent.</>
+              <div className={formStyles.resetMessageContainer}>
+                {complete ? (
+                  <>
+                    If an account with that email exists, a password reset URL
+                    was sent.
+                  </>
                 ) : null}
               </div>
             </Form>

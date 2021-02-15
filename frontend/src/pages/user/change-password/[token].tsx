@@ -5,12 +5,12 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as Yup from "yup";
+import { Layout } from "../../../components/Layout";
+import { useChangePasswordMutation } from "../../../generated/graphql";
 import formStyles from "../../../public/css/form.module.css";
 import styles from "../../../public/css/pages/register.module.css";
-import { Layout } from "../../components/Layout";
-import { useChangePasswordMutation } from "../../generated/graphql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
-import { toErrorMap } from "../../utils/toErrorMap";
+import { createUrqlClient } from "../../../utils/createUrqlClient";
+import { toErrorMap } from "../../../utils/toErrorMap";
 
 const ChangePasswordSchema = Yup.object().shape({
   newPassword: Yup.string()

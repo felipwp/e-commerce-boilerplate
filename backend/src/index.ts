@@ -15,6 +15,7 @@ import { Product } from "./entities/Product";
 import { ProductImage } from "./entities/ProductImage";
 import { User } from "./entities/User";
 import { ProductResolver } from "./resolvers/product";
+import { S3Resolver } from "./resolvers/s3";
 import { UserResolver } from "./resolvers/user";
 
 // função usada para não precisar setar o arquivo todo como assíncrono
@@ -34,8 +35,6 @@ const main = async () => {
 
   const app = express();
 
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
-
   const RedisStore = connectRedis(session);
   const redis = new Redis();
 
@@ -46,6 +45,7 @@ const main = async () => {
       credentials: true,
     })
   );
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   app.use(
     session({
@@ -69,7 +69,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ProductResolver, UserResolver],
+      resolvers: [ProductResolver, UserResolver, S3Resolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),

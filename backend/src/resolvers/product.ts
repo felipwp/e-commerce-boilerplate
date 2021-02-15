@@ -1,5 +1,3 @@
-import { createWriteStream } from "fs";
-import { FileUpload, GraphQLUpload } from "graphql-upload";
 import {
   Arg,
   Field,
@@ -10,9 +8,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { Product } from "../entities/Product";
-import { ProductImage } from "../entities/ProductImage";
 import { isAdmin } from "../middleware/isAdmin";
-import { cleanDate } from "../utils/cleanDate";
 
 @InputType()
 class ProductInput {
@@ -34,37 +30,6 @@ class ProductInput {
 
 @Resolver()
 export class ProductResolver {
-  @Mutation(() => Boolean)
-  async uploadPhoto(
-    @Arg("productId")
-    productId: number,
-    @Arg("file", () => GraphQLUpload) { createReadStream, filename }: FileUpload
-  ): Promise<boolean> {
-    const fullFileName = `upload_${cleanDate()}.${filename.split(".")[1]}`;
-    return new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(
-          createWriteStream(
-            __dirname + `/../../storage/uploads/${fullFileName}`
-          )
-        )
-        .on("finish", async () => {
-          const product = await Product.findOne(productId);
-
-          // caso não exista nenhum produto com aquele id
-          if (!product) reject(false);
-
-          ProductImage.create({
-            url: fullFileName,
-            productId,
-          }).save();
-
-          resolve(true);
-        })
-        .on("error", () => reject(false))
-    );
-  }
-
   // lista todos os produtos
   // Ctx é o context, onde é passada a instância da DB
   // A query irá retornar uma Promise, que contém um Array de <Product> ou null

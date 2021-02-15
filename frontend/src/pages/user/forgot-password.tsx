@@ -3,12 +3,12 @@ import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import formStyles from "../../public/css/form.module.css";
-import styles from "../../public/css/pages/login.module.css";
-import { Layout } from "../components/Layout";
-import { Media } from "../components/Media";
-import { useForgotPasswordMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import styles from "../../../public/css/pages/login.module.css";
+import { Layout } from "../../components/Layout";
+import { Media } from "../../components/Media";
+import { useForgotPasswordMutation } from "../../generated/graphql";
+import { createUrqlClient } from "../../utils/createUrqlClient";
+import formStyles from "./../../../public/css/form.module.css";
 
 const forgotPasswordSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),

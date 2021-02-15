@@ -4,14 +4,14 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import * as Yup from "yup";
+import { Input } from "../../components/Input";
+import { Layout } from "../../components/Layout";
+import { Media } from "../../components/Media";
+import { useLoginMutation } from "../../generated/graphql";
 import formStyles from "../../public/css/form.module.css";
 import styles from "../../public/css/pages/login.module.css";
-import { Input } from "../components/Input";
-import { Layout } from "../components/Layout";
-import { Media } from "../components/Media";
-import { useLoginMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import { toErrorMap } from "../utils/toErrorMap";
+import { createUrqlClient } from "../../utils/createUrqlClient";
+import { toErrorMap } from "../../utils/toErrorMap";
 
 const loginSchema = Yup.object().shape({
   usernameOrEmail: Yup.string()

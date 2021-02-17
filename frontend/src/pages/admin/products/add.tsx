@@ -1,15 +1,22 @@
-import { Field, FieldArray, Form, Formik } from "formik";
+import axios from "axios";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
+import Dropzone from "react-dropzone";
 import * as Yup from "yup";
 import formStyles from "../../../../public/css/form.module.css";
 import adminPageStyles from "../../../../public/css/pages/admin/common.module.css";
 import productStyles from "../../../../public/css/pages/admin/products.module.css";
 import { Input } from "../../../components/Input";
 import { Layout } from "../../../components/Layout";
+import {
+  useCreateProductImageMutation,
+  useCreateProductMutation,
+  useSignS3Mutation,
+} from "../../../generated/graphql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
-import { isValidURL } from "../../../utils/isValidURL";
+import { formatFileName } from "../../../utils/formatFileName";
 
 const productSchema = Yup.object().shape({
   name: Yup.string()
@@ -25,27 +32,24 @@ const productSchema = Yup.object().shape({
 });
 
 export const CreateProducts: React.FC<{}> = ({}) => {
-  const [files, setFiles] = useState([{ url: "" }]);
+  const [files, setFiles] = useState(null);
+  const [, signS3] = useSignS3Mutation();
+  const [, createProduct] = useCreateProductMutation();
+  const [, createProductImage] = useCreateProductImageMutation();
 
-  const addFileInput = () => {
-    if (files.length < 4) setFiles([...files, { url: "" }]);
+  const onDrop = (acceptedFiles: any) => {
+    acceptedFiles.forEach((file: any) => {
+      setFiles([{ ...files }, file]);
+    });
   };
 
-  const handleInputChange = (e: any, index: number) => {
-    const url = e.target.value;
-    if (isValidURL(url)) e.target.nextSibling.src = url;
-    else e.target.nextSibling.src = "https://i.imgur.com/qINhlNV.png";
-
-    const filesList = [...files];
-    filesList[index] = url;
-    setFiles(filesList);
-  };
-
-  // handle click event of the Remove button
-  const handleRemoveClick = (index: number) => {
-    const filesList = [...files];
-    filesList.splice(index, 1);
-    setFiles(filesList);
+  const uploadToS3 = async (file: File, signedRequest: any) => {
+    const options = {
+      headers: {
+        "Content-Type": file.type,
+      },
+    };
+    await axios.put(signedRequest, file, options);
   };
 
   return (
@@ -68,14 +72,32 @@ export const CreateProducts: React.FC<{}> = ({}) => {
               description: "",
               price: 0,
               size: "",
-              images: [""],
+              url: "",
             }}
             validationSchema={productSchema}
-            onSubmit={async (values, { setErrors }) => {
-              alert(JSON.stringify(values));
+            onSubmit={async (values) => {
+              const response = await createProduct({ input: values });
+
+              if (response.data.createProduct.id) {
+                const productId = response.data.createProduct.id;
+
+                await files.forEach(async (file: File) => {
+                  const fileResponse = await signS3({
+                    filename: formatFileName(file.name),
+                    filetype: file.type,
+                  });
+
+                  const { signedRequest, url } = fileResponse.data.signS3;
+                  console.log("signedRequest", signedRequest);
+                  console.log("url", url);
+                  await uploadToS3(file, signedRequest);
+
+                  await createProductImage({ productId, url });
+                });
+              }
             }}
           >
-            {({ errors, touched, values }) => (
+            {({ errors, touched }) => (
               <Form
                 className={`${formStyles.form} ${productStyles.productForm}`}
               >
@@ -123,42 +145,29 @@ export const CreateProducts: React.FC<{}> = ({}) => {
                     type="description"
                     placeholder="Build description"
                   />
-                  <FieldArray
-                    name="images"
-                    render={(arrayHelpers) =>
-                      values.images.map((url, index) => {
-                        return (
-                          <div
-                            className={productStyles.imageUrlContainer}
-                            key={index}
-                          >
-                            <Field
-                              className={productStyles.imageUrl}
-                              name={`image.${index}`}
-                              type={`image.${index}`}
-                              placeholder="URL"
-                            />
-                            <div>
-                              <button
-                                type="button"
-                                onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                              >
-                                -
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => arrayHelpers.insert(index, "")} // insert an empty string at a position
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })
-                    }
+
+                  <Input
+                    errors={errors.url}
+                    touched={touched.url}
+                    className={formStyles.textArea}
+                    label="URL"
+                    name="url"
+                    placeholder="Build URL"
                   />
                 </div>
-
+                <Dropzone onDrop={onDrop}>
+                  {({ getRootProps, getInputProps }) => (
+                    <div
+                      {...getRootProps()}
+                      className={adminPageStyles.dropzone}
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag and drop some files here, or click to select files
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
                 <button className={formStyles.submitButton} type="submit">
                   Submit
                 </button>

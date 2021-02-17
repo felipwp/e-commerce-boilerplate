@@ -169,7 +169,7 @@ export class UserResolver {
 
     sendEmail(
       email,
-      `<a href="http://localhost:3000/change-password/${token}">Reset your password</a>`
+      `<a href="http://localhost:3000/user/change-password/${token}">Reset your password</a>`
     );
     return true;
   }

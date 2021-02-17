@@ -23,10 +23,10 @@ export const Header: React.FC<HeaderProps> = ({}) => {
   } else if (!data?.me) {
     body = (
       <div className={styles.signUpContainer}>
-        <NextLink href="/register">
+        <NextLink href="/user/register">
           <a>Sign up</a>
         </NextLink>
-        <NextLink href="/login">
+        <NextLink href="/user/login">
           <a>Log in</a>
         </NextLink>
       </div>
@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({}) => {
   } else {
     body = (
       <div className={styles.loggedUserContainer}>
-        <NextLink href="/profile">
+        <NextLink href="/user/profile">
           <a>
             {" "}
             <Icon name="user" />{" "}

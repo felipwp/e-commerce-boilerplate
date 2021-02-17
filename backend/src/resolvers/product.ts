@@ -2,12 +2,14 @@ import {
   Arg,
   Field,
   InputType,
+  Int,
   Mutation,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { Product } from "../entities/Product";
+import { ProductImage } from "../entities/ProductImage";
 import { isAdmin } from "../middleware/isAdmin";
 
 @InputType()
@@ -50,6 +52,17 @@ export class ProductResolver {
   async createProduct(@Arg("input") input: ProductInput): Promise<Product> {
     return Product.create({
       ...input,
+    }).save();
+  }
+
+  @Mutation(() => Product)
+  createProductImage(
+    @Arg("productId", () => Int) productId: number,
+    @Arg("url") url: string
+  ): Promise<ProductImage> {
+    return ProductImage.create({
+      productId,
+      url,
     }).save();
   }
 

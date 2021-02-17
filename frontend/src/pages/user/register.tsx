@@ -4,11 +4,11 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import * as Yup from "yup";
+import formStyles from "../../../public/css/form.module.css";
+import styles from "../../../public/css/pages/register.module.css";
 import { Input } from "../../components/Input";
 import { Layout } from "../../components/Layout";
 import { useRegisterMutation } from "../../generated/graphql";
-import formStyles from "../../public/css/form.module.css";
-import styles from "../../public/css/pages/register.module.css";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { toErrorMap } from "../../utils/toErrorMap";
 

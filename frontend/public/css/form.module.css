@@ -121,7 +121,7 @@
   box-sizing: border-box; /* Opera/IE 8+ */
 }
 
-.submitButton {
+.submitButtonAddPage {
   width: 20%;
   align-self: flex-end;
   text-transform: uppercase;

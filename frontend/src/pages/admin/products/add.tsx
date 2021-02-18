@@ -10,6 +10,7 @@ import adminPageStyles from "../../../../public/css/pages/admin/common.module.cs
 import productStyles from "../../../../public/css/pages/admin/products.module.css";
 import { Input } from "../../../components/Input";
 import { Layout } from "../../../components/Layout";
+import { Preview } from "../../../components/Preview";
 import {
   useCreateProductImageMutation,
   useCreateProductMutation,
@@ -32,14 +33,18 @@ const productSchema = Yup.object().shape({
 });
 
 export const CreateProducts: React.FC<{}> = ({}) => {
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [previewsState, setPreviewsState] = useState(null);
   const [, signS3] = useSignS3Mutation();
   const [, createProduct] = useCreateProductMutation();
   const [, createProductImage] = useCreateProductImageMutation();
 
-  const onDrop = (acceptedFiles: any) => {
-    acceptedFiles.forEach((file: any) => {
-      setFiles([{ ...files }, file]);
+  const onDrop = async (acceptedFiles: any) => {
+    setFiles(acceptedFiles);
+
+    acceptedFiles.forEach((file: File) => {
+      setPreviews([...previews, <Preview file={file} />]);
     });
   };
 
@@ -81,18 +86,22 @@ export const CreateProducts: React.FC<{}> = ({}) => {
               if (response.data.createProduct.id) {
                 const productId = response.data.createProduct.id;
 
-                await files.forEach(async (file: File) => {
+                console.log("productId", productId);
+                console.log("files", files);
+
+                await files.forEach(async (file: any) => {
                   const fileResponse = await signS3({
                     filename: formatFileName(file.name),
                     filetype: file.type,
                   });
 
                   const { signedRequest, url } = fileResponse.data.signS3;
-                  console.log("signedRequest", signedRequest);
-                  console.log("url", url);
                   await uploadToS3(file, signedRequest);
 
                   await createProductImage({ productId, url });
+
+                  console.log("previews", previews);
+                  // redirecionar para a tela do produto
                 });
               }
             }}
@@ -155,19 +164,25 @@ export const CreateProducts: React.FC<{}> = ({}) => {
                     placeholder="Build URL"
                   />
                 </div>
-                <Dropzone onDrop={onDrop}>
-                  {({ getRootProps, getInputProps }) => (
-                    <div
-                      {...getRootProps()}
-                      className={adminPageStyles.dropzone}
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag and drop some files here, or click to select files
-                      </p>
-                    </div>
-                  )}
-                </Dropzone>
+                <div className={adminPageStyles.dropzoneContainer}>
+                  <Dropzone onDrop={onDrop}>
+                    {({ getRootProps, getInputProps }) => (
+                      <div
+                        {...getRootProps()}
+                        className={adminPageStyles.dropzone}
+                      >
+                        <input {...getInputProps()} />
+                        <p>
+                          Drag and drop some files here, or click to select
+                          files
+                        </p>
+                      </div>
+                    )}
+                  </Dropzone>
+                  <div className={adminPageStyles.dropzonePreviews}>
+                    {previews}
+                  </div>
+                </div>
                 <button className={formStyles.submitButton} type="submit">
                   Submit
                 </button>

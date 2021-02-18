@@ -11,19 +11,10 @@ import {
 import { v4 } from "uuid";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { User } from "../entities/User";
-import { MyContext } from "../types";
+import { Error, MyContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
 import { UsernamePasswordInput } from "../utils/UsernamePasswordInput";
 import { validateRegistration } from "../utils/validateRegistration";
-
-@ObjectType()
-class Error {
-  @Field()
-  field: string;
-
-  @Field()
-  message: string;
-}
 
 // Object types podem ser retornados nas mutações
 @ObjectType()

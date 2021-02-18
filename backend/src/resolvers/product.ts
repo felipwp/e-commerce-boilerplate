@@ -4,6 +4,7 @@ import {
   InputType,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
@@ -11,6 +12,7 @@ import {
 import { Product } from "../entities/Product";
 import { ProductImage } from "../entities/ProductImage";
 import { isAdmin } from "../middleware/isAdmin";
+import { Error } from "../types";
 
 @InputType()
 class ProductInput {
@@ -30,6 +32,18 @@ class ProductInput {
   size: string;
 }
 
+@ObjectType()
+class ProductResponse {
+  @Field(() => [Error], { nullable: true })
+  errors?: Error[];
+
+  @Field(() => Product, { nullable: true })
+  product?: Product;
+
+  @Field(() => [ProductImage], { nullable: true })
+  images?: ProductImage[];
+}
+
 @Resolver()
 export class ProductResolver {
   // lista todos os produtos
@@ -40,16 +54,40 @@ export class ProductResolver {
     return Product.find();
   }
 
-  // lista apenas um produto
-  @Query(() => Product, { nullable: true })
-  getProduct(@Arg("id") id: number): Promise<Product | undefined> {
-    return Product.findOne(id);
+  @Query(() => ProductResponse)
+  async getProduct(@Arg("id") id: number): Promise<ProductResponse> {
+    const product = await Product.findOne(id);
+    console.log("product", product);
+
+    if (!product) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message: "Invalid product ID",
+          },
+        ],
+      };
+    }
+
+    const images = await ProductImage.find({ where: { productId: id } });
+
+    console.log("images", images);
+
+    if (!images) {
+      return { product };
+    }
+
+    return {
+      product: product,
+      images: images,
+    };
   }
 
   // Cria um produto
   @Mutation(() => Product)
   @UseMiddleware(isAdmin)
-  async createProduct(@Arg("input") input: ProductInput): Promise<Product> {
+  createProduct(@Arg("input") input: ProductInput): Promise<Product> {
     return Product.create({
       ...input,
     }).save();

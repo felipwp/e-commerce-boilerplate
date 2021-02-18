@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Session, SessionData } from "express-session";
 import { Redis } from "ioredis";
+import { Field, ObjectType } from "type-graphql";
 
 export type MyContext = {
   req: Request & {
@@ -9,3 +10,12 @@ export type MyContext = {
   redis: Redis;
   res: Response;
 };
+
+@ObjectType()
+export class Error {
+  @Field()
+  field: string;
+
+  @Field()
+  message: string;
+}

@@ -1,8 +1,10 @@
-query GetAllProducts{
+query getAllProducts {
   getAllProducts {
-    id
-    createdAt
     updatedAt
+    price
+    size
     name
+    url
+    description
   }
 }

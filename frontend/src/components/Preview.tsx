@@ -2,13 +2,15 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import styles from "../../public/css/components/Thumbnail.module.css";
 
-interface ThumbnailProps {
+interface PreviewProps {
   file: any;
 }
 
-export const Thumbnail: React.FC<ThumbnailProps> = ({ file }) => {
+export const Preview: React.FC<PreviewProps> = ({ file }) => {
   const [loading, setLoading] = useState(false);
-  const [thumbnail, setThumbnail] = useState<any | null>(null);
+  const [thumbnail, setThumbnail] = useState<any | null>(
+    "https://cdn.discordapp.com/attachments/647989725247963139/811778237348315216/1613611206298.png"
+  );
 
   useEffect(() => {
     if (!file) return;
@@ -31,10 +33,10 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ file }) => {
       src={thumbnail}
       alt={file.name}
       className={styles.thumbnail}
-      height={500}
-      width={500}
+      height={250}
+      width={250}
     />
   );
 };
 
-export default Thumbnail;
+export default Preview;

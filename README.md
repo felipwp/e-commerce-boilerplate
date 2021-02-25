@@ -23,6 +23,9 @@ Principais funcionalidades da aplicação:
 - NextJS
 - Typescript
 - GraphQL
+- TypeORM
+- Apollo
 - PostgreSQL
+- Redis
 
 <img alt="Landing" src="https://i.imgur.com/cWZk941.png"/>

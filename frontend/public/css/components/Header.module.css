@@ -60,15 +60,13 @@
   justify-content: flex-end;
 }
 
-
 .signUpContainer a:last-child {
   margin-left: 25px;
 }
 
 .signUpContainer a:hover,
 .headerTextContainer a:hover,
-.userProfile a:hover
-{
+.userProfile a:hover {
   color: var(--orange);
   border-color: var(--orange);
 }

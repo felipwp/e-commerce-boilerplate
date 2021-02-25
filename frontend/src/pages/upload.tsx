@@ -39,7 +39,7 @@ const Upload = () => {
     <div style={{ backgroundColor: "#fff", width: "100%", height: "100vh" }}>
       <Dropzone onDrop={onDrop}>
         {({ getRootProps, getInputProps }) => (
-          <section className={styles.dropzone}>
+          <section>
             <div {...getRootProps()}>
               <input {...getInputProps()} />
               <p>Drag 'n' drop some files here, or click to select files</p>

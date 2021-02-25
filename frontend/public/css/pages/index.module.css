@@ -1,47 +1,86 @@
-.hero {
-  margin-top: 2%;
+/* HERO SECTION */
+/* HERO SECTION */
+/* HERO SECTION */
+
+.heroSection {
   display: flex;
   flex-direction: column;
-  margin-left: 23.645%;
-  justify-content: center;
-  align-items: flex-start;
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 85px;
-  line-height: 100px;
-  color: var(--white);
-}
-
-.hero p:nth-child(2) {
-  color: var(--orange);
-}
-
-.mainButton {
-  width: 300px;
-  height: 60px;
-  margin-top: 25px;
-  border: 3px solid var(--white);
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+
+.heroSection h2 {
+  font-weight: 500;
+  font-size: 1.8rem;
+  width: 11rem;
+  line-height: 3rem;
+  text-align: center;
+  color: var(--whiteish);
+}
+
+.heroSection h1 {
+  color: var(--white);
   font-family: Poppins;
-  font-weight: bold;
-  font-size: 16px;
-  letter-spacing: 0.05em;
+  font-weight: 800;
+  font-size: 4rem;
+  line-height: 3.5rem;
+}
+
+.heroSection a:first-of-type {
+  background: var(--blacknt);
+  border: 0.1rem solid var(--white);
+  border-radius: 0.35rem;
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 0.4rem 0;
+  text-align: center;
+  width: 11rem;
+  margin: 1.5rem;
   color: var(--white);
 }
 
-.mainButton:hover {
-  border-color: var(--orange);
+.heroSection a:first-of-type:hover {
+  border: 0.1rem solid var(--orange);
 }
 
-.heroBuild {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  aspect-ratio: contain;
-  width: 41%;
-  filter: drop-shadow(-30px -30px 50px #000000);
+.heroSection div {
+  width: 11rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.heroSection div svg:hover * {
+  color: var(--orange);
+  fill: var(--orange);
+  cursor: pointer;
+}
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* SERVICES SECTION */
+/* SERVICES SECTION */
+/* SERVICES SECTION */
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+.servicesSection {
+  padding: 5rem 15% 8rem 15%;
+  background: var(--darkest);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.servicesSection h1 {
+  color: var(--white);
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 4rem;
+  margin-bottom: 1rem;
+  /* identical to box height */
+}
+
+.servicesSection div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

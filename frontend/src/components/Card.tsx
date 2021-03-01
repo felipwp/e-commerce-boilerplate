@@ -16,7 +16,9 @@ export const Card: React.FC<CardProps> = ({ name, text }) => {
           <Icon name={name} />
         </div>
         <h1>{name}</h1>
-        <p>{text}</p>
+        <div>
+          <p>{text}</p>
+        </div>
       </div>
     </NextLink>
   );

@@ -11,9 +11,8 @@
 
 .heroSection h2 {
   font-weight: 500;
-  font-size: 1.8rem;
-  width: 11rem;
-  line-height: 3rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
   text-align: center;
   color: var(--whiteish);
 }

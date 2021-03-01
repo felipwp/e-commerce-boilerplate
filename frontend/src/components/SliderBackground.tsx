@@ -1,3 +1,4 @@
+import NextImage from "next/image";
 import React, { useState } from "react";
 import styles from "../../public/css/components/SliderBackground.module.css";
 
@@ -24,23 +25,27 @@ export const SliderBackground: React.FC<SliderBackground> = ({
   };
   return (
     <>
-      <button className={styles.sliderButton} onClick={slideLeft}>
-        {"<"}
-      </button>
-      <button className={styles.sliderButton} onClick={slideRight}>
-        {">"}
-      </button>
       {images.length > 0 && (
-        <>
-          <div className={styles.sliderOverlay}></div>
-          <div
-            className={styles.sliderContainer}
-            style={{
-              backgroundImage: `url(${images[index]})`,
-            }}
-          ></div>
+        <div className={styles.sliderContainer}>
+          <button className={styles.sliderButton} onClick={slideLeft}>
+            {"<"}
+          </button>
+          <button className={styles.sliderButton} onClick={slideRight}>
+            {">"}
+          </button>
           <div className={styles.sliderContent}>{children}</div>
-        </>
+
+          <div className={styles.sliderOverlay}></div>
+          <NextImage
+            width={100}
+            height={100}
+            layout="responsive"
+            objectPosition="center top"
+            objectFit="cover"
+            src={`/assets/img/uploads/builds/${images[index]}`}
+            alt={`Image ${images[index]}`}
+          />
+        </div>
       )}
     </>
   );

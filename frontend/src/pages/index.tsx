@@ -14,11 +14,8 @@ const Index = () => {
     <>
       <Layout header={false}>
         <SliderBackground
-          // fetch aws urls from db using graphql
-          images={[
-            "https://i.imgur.com/IoHC8hg.png",
-            "https://i.imgur.com/kkRdvXU.png",
-          ]}
+          // fetch image names from db using graphql
+          images={["10.png", "11.png"]}
         >
           <section className={styles.heroSection}>
             <h2>MIASTUDIOS</h2>

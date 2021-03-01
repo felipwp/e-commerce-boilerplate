@@ -83,3 +83,94 @@
   align-items: center;
   justify-content: space-between;
 }
+
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* CONTACT SECTION */
+/* CONTACT SECTION */
+/* CONTACT SECTION */
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+.contactSection {
+  padding: 8rem 15% 8rem 15%;
+  background-color: var(--dark-gray);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-repeat: repeat;
+  border: solid var(--graynt);
+  border-width: 0.1rem 0px;
+}
+
+.infoContainer {
+  height: 100%;
+  display: flex;
+  align-items: space-between;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.infoContainer h1 {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 4rem;
+  line-height: 2rem;
+  -webkit-text-stroke-width: 1px;
+}
+
+.infoContainer h1:first-of-type {
+  color: var(--white);
+  -webkit-text-stroke-color: var(--white);
+  z-index: 1000;
+}
+
+.infoContainer h1:last-of-type {
+  color: transparent;
+  -webkit-text-stroke-color: var(--orange);
+}
+
+.discordInfoContainer {
+  width: calc(100% - 9rem);
+  height: 100%;
+  margin-top: 2rem;
+  background-color: var(--darkest);
+  box-shadow: var(--box-shadow);
+  padding: 3rem;
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.discordInfoContainer div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.discordInfoContainer div p {
+  font-weight: 600;
+  margin-left: 2rem;
+  margin-bottom: 1.3rem;
+}
+
+.discordInfoContainer p {
+  margin: 1rem 0;
+}
+
+.discordInfoContainer a {
+  font-weight: 700;
+  color: var(--orange);
+}
+.discordInfoContainer a:hover {
+  filter: brightness(2);
+}
+
+.discordInfoContainer ul li {
+  font-weight: 200;
+  margin-left: 1rem;
+}
+
+.contactFormContainer {
+  background: var(--darkest);
+  padding: 2rem 5rem 4rem 5rem;
+  width: 60%;
+}

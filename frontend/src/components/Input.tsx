@@ -17,7 +17,7 @@ export const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   return (
-    <>
+    <div className={formStyles.inputContainer}>
       {label && props.name ? (
         <div className={formStyles.labelContainer}>
           <label htmlFor={props.name} className={formStyles.label}>
@@ -29,6 +29,6 @@ export const Input: React.FC<InputProps> = ({
         </div>
       ) : null}
       <Field as={as} {...props} />
-    </>
+    </div>
   );
 };

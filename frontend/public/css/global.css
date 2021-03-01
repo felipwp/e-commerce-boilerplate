@@ -22,6 +22,10 @@ button:hover {
   cursor: pointer;
 }
 
+textarea[name="text"] {
+  resize: none;
+}
+
 :root {
   font-size: 16px;
   --orange: #f7301d;
@@ -36,6 +40,7 @@ button:hover {
   --blackish: rgba(10, 10, 10, 0.6);
   --blacknt: rgba(10, 10, 10, 0.4);
   --gray: #181818;
+  --graynt: #4f4f4f;
   --orange-box-shadow: 0px 12px 20px rgba(247, 48, 29, 0.5);
   --box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.5);
 }

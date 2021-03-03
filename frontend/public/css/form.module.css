@@ -123,6 +123,10 @@
   box-sizing: border-box; /* Opera/IE 8+ */
 }
 
+.textArea:focus {
+  border-color: var(--orange);
+}
+
 .submitButtonAddPage {
   width: 20%;
   align-self: flex-end;

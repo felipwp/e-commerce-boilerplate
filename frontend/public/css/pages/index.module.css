@@ -48,11 +48,6 @@
   justify-content: space-between;
 }
 
-.heroSection div svg:hover * {
-  color: var(--orange);
-  fill: var(--orange);
-  cursor: pointer;
-}
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* SERVICES SECTION */
 /* SERVICES SECTION */
@@ -173,4 +168,5 @@
   background: var(--darkest);
   padding: 2rem 5rem 4rem 5rem;
   width: 60%;
+  box-shadow: var(--box-shadow);
 }

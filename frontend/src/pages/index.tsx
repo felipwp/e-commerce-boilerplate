@@ -7,10 +7,12 @@ import formStyles from "../../public/css/form.module.css";
 import miscStyles from "../../public/css/misc/svg.module.css";
 import styles from "../../public/css/pages/index.module.css";
 import { Card } from "../components/Card";
+import { Footer } from "../components/Footer";
 import { Icon } from "../components/Icon";
 import { Input } from "../components/Input";
 import { Layout } from "../components/Layout";
 import { SliderBackground } from "../components/SliderBackground";
+import { Socials } from "../components/Socials";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const contactSchema = Yup.object().shape({
@@ -18,8 +20,7 @@ const contactSchema = Yup.object().shape({
   subject: Yup.string().max(50, "Too long!").required("Required"),
   text: Yup.string().max(2000, "Too long!").required("Required"),
 });
-// "https://i.imgur.com/kkRdvXU.png",
-// "https://i.imgur.com/IoHC8hg.png",
+
 const Index = () => {
   return (
     <>
@@ -33,12 +34,7 @@ const Index = () => {
             <h1>CREATIVITY</h1>
             <h1>TAKES COURAGE</h1>
             <NextLink href="/portfolio">PORTFOLIO</NextLink>
-            <div>
-              <Icon name="discord" />
-              <Icon name="twitter" />
-              <Icon name="youtube" />
-              <Icon name="instagram" />
-            </div>
+            <Socials />
           </section>
         </SliderBackground>
         {/* services */}
@@ -133,6 +129,7 @@ const Index = () => {
             </Formik>
           </div>
         </section>
+        <Footer />
       </Layout>
     </>
   );

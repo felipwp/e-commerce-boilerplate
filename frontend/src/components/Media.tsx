@@ -1,14 +1,20 @@
 import React from "react";
 import styles from "../../public/css/components/Media.module.css";
 
-interface HeaderProps {
+interface MediaProps {
   align?: string;
 }
 
-export const Media: React.FC<HeaderProps> = ({ align }) => {
+export const Media: React.FC<MediaProps> = ({ align }) => {
   return (
     <div className={align == "right" ? styles["media-right"] : styles.media}>
-      <div className={align == "right" ? styles["mediaText-right"] : styles.mediaText} >MIA STUDIOS</div>
+      <div
+        className={
+          align == "right" ? styles["mediaText-right"] : styles.mediaText
+        }
+      >
+        MIA STUDIOS
+      </div>
       <div className={styles.line}></div>
 
       <div className={styles.mediaIcons}>
